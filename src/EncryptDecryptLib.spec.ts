@@ -1,6 +1,7 @@
 // Vitest test for CreateSelfExtractingFile.ts
 import { describe, it, expect } from 'vitest'
-import {encryptBuffer, decryptString} from './CreateSelfExtractingFileLib';
+import { encryptBuffer } from './EncryptingLib';
+import { decryptString } from './SelfDecryptingLib';
 
 import crypto from 'crypto';
 

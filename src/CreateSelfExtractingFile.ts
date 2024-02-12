@@ -34,7 +34,8 @@
 // This file reads in that file and replaces the 
 // placeholder text with the encrypted file. 
 import { readFile, writeFile } from 'fs/promises';
-import { bufferToUint8Array, encryptBuffer } from './CreateSelfExtractingFileLib.js';
+import { encryptBuffer } from './EncryptingLib.js';
+import { bufferToUint8Array } from './SelfDecryptingLib.js';
 import crypto from 'crypto';
 
 
