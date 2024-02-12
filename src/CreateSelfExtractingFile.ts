@@ -29,7 +29,7 @@
 // the browser behaves like they are downloading the original file.
 
 // Implemenation notes:
-// There is another file, SelfExtractingTemplate.html, 
+// There is another file, SelfDecryptingTemplate.html, 
 // that contains most of the HTML and decryption code.  
 // This file reads in that file and replaces the 
 // placeholder text with the encrypted file. 
@@ -59,7 +59,7 @@ async function main(filename: string, password : string) {
     decryptionJavascript = decryptionJavascript.replace(/export /g, '');
 
     // Create the output file
-    const htmlTemplate = await readFile('SelfExtractingTemplate.html');
+    const htmlTemplate = await readFile('SelfDecryptingTemplate.html');
 
     const htmlFile = htmlTemplate.toString()
         .replace(/<!--FILENAME-->/g, filenameWithoutDir)
