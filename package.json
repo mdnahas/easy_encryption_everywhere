@@ -1,0 +1,23 @@
+{
+  "name": "easy_encryption_everywhere",
+  "version": "1.0.0",
+  "description": "Encrypt and decrypt in a browsers, as easy as uploading or downloading a file",
+  "scripts": {
+    "test": "vitest",
+    "testUI": "vitest --ui --coverage.enabled=true",
+    "coverage": "vitest run --coverage"
+  },
+  "author": "Michael Nahas",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@vitest/ui": "^1.2.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "type": "module",
+  "dependencies": {
+    "source-map-support": "^0.5.21"
+  }
+}

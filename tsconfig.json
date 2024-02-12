@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "target": "ES5",
+      "module": "ESNext",
+      "sourceMap": true,  // output js.map files, for debugging
+      "outDir": "./dist",
+
+      //"typeRoots": ["../pb/pb_data"],
+
+      // copied from https://github.com/benallfree/ts-pb-hooks-starter/blob/main/tsconfig.json
+      "lib": ["ES5"],
+      "allowJs": true,  // allow import of javascript files
+      "checkJs": true,  // check all javascript files
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,  // skip checking all d.ts files
+      "strict": true,        // stricter type checking
+      "moduleResolution": "node",   // older version of node resolution.  Should be "nodenext"?
+      "noUncheckedIndexedAccess": true,  // adds "undefined" to certain types
+      "strictNullChecks": true,  // null and undefined are types and are tested against
+      //"noEmit": true  // ??? Do not output JavaScript source code??  Huh.  it is doing it!
+    },
+    "include": [
+      "src/**/*.ts"
+    ]
+  }

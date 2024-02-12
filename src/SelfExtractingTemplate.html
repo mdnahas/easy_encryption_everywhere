@@ -1,0 +1,59 @@
+<!doctype html>
+<script>
+    let base64EncodedFile = "<!--ENCRYPTED_FILE-->";
+    let base64EncodedSalt = "<!--SALT-->";
+    let base64EncodedIV = "<!--INITIALIZATION_VECTOR-->";
+
+    //<!--DECRYPTION_LIB-->
+
+
+    async function handleButton(event) {
+        event.preventDefault();
+
+        let password = document.getElementById("password").value;
+
+        let decrypted = await decryptString(window.crypto, password, base64EncodedSalt, base64EncodedIV, base64EncodedFile);
+
+        if (decrypted) {
+            let blob = new Blob([decrypted], {type: "text/csv;charset=utf-8"});
+            let url = URL.createObjectURL(blob);
+
+            let link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "<!--FILENAME-->");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert("Incorrect password");
+        }
+    };
+
+</script>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Password-protected copy of <!--FILENAME--></title>
+    </head>
+    <body>
+        <h1>Password-protected copy of <!--FILENAME--></h1>
+        <p>
+            This is a password-protected copy of <!--FILENAME-->.
+            The file is encrypted with AES-256 using the Web Cryptography API.
+            "AES" is the Advanced Encryption Standard approved by 
+            the National Institute of Standards and Technology (NIST). 
+            As far as we know, this is the strongest encryption
+            available on most computers.  
+        </p>
+        <br />
+        <p>
+            Please enter the password to extract the file.
+            <form action="" id="passwordForm" onsubmit="handleButton(event)">
+                <label for="password">Password:</label>
+                <input type="text" id="password" />
+                <button type="submit">Decrypt File</button>
+            </form>
+        </p>    
+    </body>
+</html>
