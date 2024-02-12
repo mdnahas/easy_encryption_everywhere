@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Easy Encryption Everywhere</title>
+        <script>
+
+            //
+            // TODO: REPLACE FOO WITH ENCRYPTING FUNCTIONS
+            //
+            function foo(fileContent, password) {
+                console.log("File content as Uint8Array:", fileContent);
+                console.log("Password:", password);
+
+                return fileContent
+            }
+
+            async function handleButton(event) {
+                event.preventDefault();
+
+                const fileInput = document.getElementById('fileInput');
+                const passwordInput = document.getElementById('passwordInput');
+
+                if (!passwordInput.value) {
+                    // TODO: When left blank, this program should generate a random password.
+                    alert("Please enter a password.");
+                    return;
+                } 
+
+                if (fileInput.files.length === 1) {
+                    const file = fileInput.files[0];
+                    
+                    const buffer = await file.arrayBuffer()
+                    const inputUint8Array = new Uint8Array(buffer)
+
+                    const outputUint8Array = await foo(inputUint8Array, passwordInput.value);
+
+                    if (outputUint8Array) {
+                        let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});
+                        let url = URL.createObjectURL(blob);
+
+                        let link = document.createElement("a");
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", file.name + ".ENCRYPTED.html");
+                        link.style.visibility = "hidden";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } else {
+                        alert("Encryption failed.  No file was created.");
+                    }
+
+                } else if (fileInput.files.length > 1) {
+                    alert("This program can only encrypt one file at a time.");
+                } else {
+                    alert("Please select a file.");
+                }
+            }
+        </script>
+    </head>
+    <body>
+
+        <h1>Encrypt a File with Easy Encryption Everywhere</h1>
+
+        <form action="" onsubmit="handleButton(event)">
+            <label for="fileInput">File:</label>
+            <input type="file" id="fileInput"><br><br>
+
+            <label for="passwordInput">Password:</label>
+            <input type="text" id="passwordInput"><br><br>
+
+            <button type="submit">Encrypt</button>
+        </form>
+    </body>
+</html>
