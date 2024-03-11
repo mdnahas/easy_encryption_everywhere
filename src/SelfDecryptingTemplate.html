@@ -14,25 +14,46 @@
             async function handleButton(event) {
                 event.preventDefault();
 
-                let password = document.getElementById("password").value;
+                try {
 
-                let decrypted = await decryptString(window.crypto, password, base64EncodedSalt, base64EncodedIV, base64EncodedFile);
+                    if (typeof window.crypto === "undefined") {
+                        alert("Your browser does not support the Web Cryptography API.  Major browsers since 2015 support Web Crypto.  Please update or use a different browser.");
+                        return;
+                    } 
 
-                if (decrypted) {
-                    let blob = new Blob([decrypted], {type: "text/csv;charset=utf-8"});
-                    let url = URL.createObjectURL(blob);
+                    let subtle;                
+                    if (typeof window.crypto.subtle !== "undefined") {
+                        subtle = window.crypto.subtle;
+                    } else if (typeof window.crypto.webkitSubtle !== "undefined") {
+                        subtle = window.crypto.webkitSubtle;  // Early Safari support
+                    } else {
+                        alert("Your browser does not support the Web Cryptography API.   Major browsers since 2015 support Web Crypto.  Please update or use a different browser.");
+                        return;     
+                    }
 
-                    let link = document.createElement("a");
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", "<!--FILENAME-->");
-                    link.style.visibility = "hidden";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } else {
-                    alert("Incorrect password");
+                    let password = document.getElementById("password").value;
+
+                    let decrypted = await decryptString(window.crypto, subtle, password, base64EncodedSalt, base64EncodedIV, base64EncodedFile);
+
+                    if (decrypted) {
+                        let blob = new Blob([decrypted], {type: "text/csv;charset=utf-8"});
+                        let url = URL.createObjectURL(blob);
+
+                        let link = document.createElement("a");
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", "<!--FILENAME-->");
+                        link.style.visibility = "hidden";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } else {
+                        alert("Incorrect password");
+                    }
+                } catch (error) {
+                    alert("An error occurred.  Check console log for details.");
+                    console.error(error);
                 }
-            };
+            }
 
         </script>
     </head>

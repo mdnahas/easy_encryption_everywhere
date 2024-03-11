@@ -5,10 +5,12 @@
         <title>Easy Encryption Everywhere</title>
         <script>
 
-            //
-            // TODO: REPLACE FOO WITH ENCRYPTING FUNCTIONS
-            //
-            function foo(fileContent, password) {
+            // Generated code is inserted here!
+
+            // This function is disabled when code is inserted.
+            function generateEncryptedHmtlFile(fileContent, password) {
+                alert("You are executing test code.  Your file is NOT encrypted.")
+
                 console.log("File content as Uint8Array:", fileContent);
                 console.log("Password:", password);
 
@@ -33,7 +35,11 @@
                     const buffer = await file.arrayBuffer()
                     const inputUint8Array = new Uint8Array(buffer)
 
-                    const outputUint8Array = await foo(inputUint8Array, passwordInput.value);
+                    const outputUint8Array = await generateEncryptedHmtlFile(inputUint8Array, 
+                                                                             passwordInput.value,
+                                                                             file.name,
+                                                                             selfDecryptingLibSource,
+                                                                             selfDecryptingTemplate);
 
                     if (outputUint8Array) {
                         let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});

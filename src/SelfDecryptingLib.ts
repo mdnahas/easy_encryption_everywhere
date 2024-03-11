@@ -14,7 +14,7 @@ export function bufferToUint8Array(buffer : Buffer) : Uint8Array {
 // different ways of converting between strings and binary data.
 export function base64ToUint8Array(base64 : string) : Uint8Array{
     if (typeof Buffer !== 'undefined') {
-        // Node.js environment
+        // Node.js environment for testing.
         return bufferToUint8Array(Buffer.from(base64, 'base64'));
     } else if (typeof atob !== 'undefined') {
         // Browser environment
@@ -36,19 +36,19 @@ export function base64ToUint8Array(base64 : string) : Uint8Array{
 
 /* Compiled version of this function AND ALL HELPER FUNCTIONS
    should be in SelfExtractingTemplate.html  */
-export async function decryptString(crypto, password: string, base64EncodedSalt: string, base64EncodedIv: string, base64EncodedEncryptedFile: string) : Promise<Uint8Array>{
+export async function decryptString(crypto, subtle, password: string, base64EncodedSalt: string, base64EncodedIv: string, base64EncodedEncryptedFile: string) : Promise<Uint8Array|null>{
 
     let salt : Uint8Array = base64ToUint8Array(base64EncodedSalt)
 
     // Derive a key from the password
-    const key = await crypto.subtle.importKey(
+    const key = await subtle.importKey(
         'raw',
         new TextEncoder().encode(password),
         { name: 'PBKDF2' },
         false,
         ['deriveBits', 'deriveKey']
     );
-    const aesKey = await crypto.subtle.deriveKey(
+    const aesKey = await subtle.deriveKey(
         {
             name: 'PBKDF2',
             salt: salt.buffer,
@@ -64,15 +64,21 @@ export async function decryptString(crypto, password: string, base64EncodedSalt:
     // Decrypt the file
     const iv  : Uint8Array = base64ToUint8Array(base64EncodedIv)
     const encryptedFile  : Uint8Array = base64ToUint8Array(base64EncodedEncryptedFile)
-    const decryptedFile : ArrayBuffer = await crypto.subtle.decrypt(
-        {
-            name: 'AES-GCM',
-            iv: iv.buffer
-        },
-        aesKey,
-        encryptedFile
-    );
 
-    return new Uint8Array(decryptedFile);
+    try {
+        const decryptedFile : ArrayBuffer = await subtle.decrypt(
+            {
+                name: 'AES-GCM',
+                iv: iv.buffer
+            },
+            aesKey,
+            encryptedFile
+        );
+
+        return new Uint8Array(decryptedFile);
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
 }
 

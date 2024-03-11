@@ -34,17 +34,14 @@
 // This file reads in that file and replaces the 
 // placeholder text with the encrypted file. 
 import { readFile, writeFile } from 'fs/promises';
-import { encryptBuffer } from './EncryptingLib.js';
+import { generateEncryptedHmtlFile } from './EncryptingLib.js';
 import { bufferToUint8Array } from './SelfDecryptingLib.js';
-import crypto from 'crypto';
 
 
 async function main(filename: string, password : string) {
     // Read the file
     const fileBuffer : Buffer = await readFile(filename); // default encoding is 'binary'
     const fileUint8Array = bufferToUint8Array(fileBuffer);
-
-    let [ base64EncodedSalt, base64EncodedIv, base64EncodedEncryptedFile ] = await encryptBuffer(crypto, fileUint8Array, password);
 
     let filenameWithoutDir = ""
     const lastSlashIndex = filename.lastIndexOf('/');
@@ -54,26 +51,22 @@ async function main(filename: string, password : string) {
         filenameWithoutDir = filename;
     }
 
-    const decryptionJavascriptBuffer = await readFile('CreateSelfExtractingFileLib.js');
-    let decryptionJavascript = decryptionJavascriptBuffer.toString();
-    // remove export declations
-    decryptionJavascript = decryptionJavascript.replace(/export /g, '');
+    const selfDecryptingLibSourceBuffer = await readFile('SelfDecryptingLib.js');
+    let selfDecryptingLibSource = selfDecryptingLibSourceBuffer.toString();
 
     // Create the output file
-    const htmlTemplate = await readFile('SelfDecryptingTemplate.html');
+    const selfDecryptingTemplateBuffer = await readFile('SelfDecryptingTemplate.html');
+    const selfDecryptingTemplate = selfDecryptingTemplateBuffer.toString()
 
-    const htmlFile = htmlTemplate.toString()
-        .replace(/<!--FILENAME-->/g, filenameWithoutDir)
-        .replace(/<!--ENCRYPTED_FILE-->/g, base64EncodedEncryptedFile)
-        .replace(/<!--INITIALIZATION_VECTOR-->/g, base64EncodedIv)
-        .replace(/<!--SALT-->/g, base64EncodedSalt)
-        .replace(/\/\/<!--DECRYPTION_LIB-->/g, decryptionJavascript);
-
+    let htmlFile = await generateEncryptedHmtlFile(fileUint8Array, 
+                                                   password, 
+                                                   filenameWithoutDir, 
+                                                   selfDecryptingLibSource, 
+                                                   selfDecryptingTemplate);
     // Write the output file
     const outputFilename = filename + '.ENCRYPTED.html';
     await writeFile(outputFilename, htmlFile);
     console.log(`Wrote ${outputFilename}`);
-
 }
 
 
