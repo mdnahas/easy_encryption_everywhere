@@ -9,8 +9,10 @@
 
             //<!--ENCRYPTION_LIB-->
 
-            /* Test code  (uncomment to test) 
-            function generateEncryptedHmtlFile(fileContent, 
+            /* Test code  (uncomment to test HTML template file) 
+            function generateEncryptedHmtlFile(crypto,
+                                               subtle,
+                                               fileContent, 
                                                password, 
                                                filename, 
                                                base64selfDecryptingLibSource, 
@@ -23,11 +25,36 @@
 
                 return fileContent
             }
+            function generateRandomPassword() {
+                return "testPassword";
+            }
             */
+
+            // Initialize password field with a random password
+            function newPassword() {
+                if (typeof window.crypto !== "undefined") {
+                    document.getElementById('passwordInput').value = generateRandomPassword(window.crypto);
+                }
+            }
 
             async function handleButton(event) {
                 try {
                     event.preventDefault();
+
+                    if (typeof window.crypto === "undefined") {
+                        alert("Your browser does not support the Web Cryptography API.  Major browsers since 2015 support Web Crypto.  Please update or use a different browser.");
+                        return;
+                    } 
+
+                    let subtle;                
+                    if (typeof window.crypto.subtle !== "undefined") {
+                        subtle = window.crypto.subtle;
+                    } else if (typeof window.crypto.webkitSubtle !== "undefined") {
+                        subtle = window.crypto.webkitSubtle;  // Early Safari support
+                    } else {
+                        alert("Your browser does not support the Web Cryptography API.   Major browsers since 2015 support Web Crypto.  Please update or use a different browser.");
+                        return;     
+                    }
 
                     const fileInput = document.getElementById('fileInput');
                     const passwordInput = document.getElementById('passwordInput');
@@ -44,7 +71,9 @@
                         const buffer = await file.arrayBuffer()
                         const inputUint8Array = new Uint8Array(buffer)
 
-                        const outputUint8Array = await generateEncryptedHmtlFile(inputUint8Array, 
+                        const outputUint8Array = await generateEncryptedHmtlFile(window.crypto,
+                                                                                subtle,
+                                                                                inputUint8Array, 
                                                                                 passwordInput.value,
                                                                                 file.name,
                                                                                 base64selfDecryptingLibSource,
@@ -79,16 +108,81 @@
     </head>
     <body>
 
-        <h1>Encrypt a File with Easy Encryption Everywhere</h1>
+        <h1>Encrypt a File with <i>Easy Encryption Everywhere</i></h1>
 
         <form action="" onsubmit="handleButton(event)">
             <label for="fileInput">File:</label>
             <input type="file" id="fileInput"><br><br>
 
             <label for="passwordInput">Password:</label>
-            <input type="text" id="passwordInput"><br><br>
+            <input type="text" id="passwordInput" style="font-family: monospace; width: 25em;">
+            <button type="button" onclick="newPassword()">Generate a Strong Random Password</button><br><br>
 
-            <button type="submit">Encrypt</button>
+            <button type="submit">Encrypt!</button>
         </form>
+
+        <br />
+        <br />
+        <br />        
+        <hr />
+
+        <h2>What is <i>Easy Encryption Everywhere</i>?</h2>
+
+        <p>Easy Encryption Everywhere lets you encrypt a file with serious encryption
+            and be pretty sure that the receiver can decrypt it.</p> 
+        
+        <p><b>Easy:</b> You choose a file and enter a password. 
+            Then, Easy Encryption Everywhere encrypts the file inside your own webbrowser.  
+            The encrypted data is saved in an HTML file. 
+            The recipient opens that HTML file in their webbrowser and types in the password.
+            Easy Encryption Everywhere decrypts the file inside their webbrowser 
+            and they get the original decrypted file.</p>   
+
+        <p><b>Encryption:</b> Easy Encryption Everywhere uses AES algorithm with 256-bit keys, 
+            which was approved in 2022 by the US government for Top Secret information.  
+        </p>
+            
+        <p><b>Everywhere:</b> As long as the recipient has a major webbrowser from 2015 or later, 
+            they can decrypt the file.</p>
+
+        <h2>Who do I thank for this?</h2>
+
+        <p>My friend has a company 
+            <b><a href="https://www.unifiedeventsolutions.com/">Unified Event Solutions</a></b>
+           and needed to send credit card data to a client.  
+           My friend didn't know what encryption software was on the client's computer 
+           and wasn't sure if the client could install software.
+           My friend sponsored the initial version of Easy Encryption Everywhere.</p>
+
+        <p>My friend's company organizes large conferences. 
+            If you have a multi-hotel conference and need services like 
+            site selection, hotel contract negotiation, or transportation please 
+            <a href="https://www.unifiedeventsolutions.com/contact.html">contact my friend</a>.</p>
+
+        <h2>How do I trust you?</h2>
+
+        <p>I'm a good guy and been developing open-source for decades, 
+            but trust over the internet is <i>hard</i>.</p>  
+        
+        <p>If you're paranoid and know JavaScript, you can load this webpage, 
+            disconnect your computer from the internet, encrypt your data, 
+            and look at the HTML file it generates.  The JavaScript program
+            inside the HTML is pretty simple to understand.</p>
+
+        <p>The original code is open-sourced and 
+            <a href="https://github.com/mdnahas/easy_encryption_everywhere">available on Github</a>.  
+            You can look at the code and see that it doesn't send your data anywhere.  
+            Or, if you don't trust my website, compile the TypeScript for yourself.
+        </p>
+
+        <h2>What tech does this use?</h2>
+
+        <p>Easy Encryption Everywhere uses the Web Cryptography API, 
+            which is available in major webbrowsers since 2015.  
+            For generating an encryption key, 
+            it uses PBKDF2-HMAC-SHA256 with a 128-bit salt and 600,000 iterations.
+            For encryption, it uses AES-GCM with a 256-bit key and 96-bit initialization vector.
+            The salt, initialization vector, and passwords are generated using crypto.getRandomValues().  
+        </p>
     </body>
 </html>

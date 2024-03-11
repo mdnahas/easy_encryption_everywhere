@@ -53,14 +53,18 @@ export function base64ToString(s : string) : string {
 }  
 
 
-export async function generateEncryptedHmtlFile(fileUint8Array : Uint8Array, 
-                                         password : string,
-                                         filenameWithoutDir : string,
-                                         base64selfDecryptingLibSource : string,
-                                         base64selfDecryptingTemplate: string
-                                         ) : Promise<string> {
+export async function generateEncryptedHmtlFile(crypto,
+                                                subtle,
+                                                fileUint8Array : Uint8Array, 
+                                                password : string,
+                                                filenameWithoutDir : string,
+                                                base64selfDecryptingLibSource : string,
+                                                base64selfDecryptingTemplate: string
+                                                ) : Promise<string> {
 
-    let [ base64EncodedSalt, base64EncodedIv, base64EncodedEncryptedFile ] = await encryptBuffer(crypto, crypto.subtle, fileUint8Array, password);
+    
+
+    let [ base64EncodedSalt, base64EncodedIv, base64EncodedEncryptedFile ] = await encryptBuffer(crypto, subtle, fileUint8Array, password);
 
 
     // Remove export declations from decryption library
@@ -77,4 +81,31 @@ export async function generateEncryptedHmtlFile(fileUint8Array : Uint8Array,
         .replace(/\/\/<!--DECRYPTION_LIB-->/g, selfDecryptingLibSource);
 
     return htmlFile;
+}
+
+export function generateRandomPassword(crypto) : string{
+    const LENGTH = 24
+
+    // No 0,O,1,l,I
+    // About 60 values
+    const charset = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let randArray = new Uint8Array(LENGTH*4);  // 4 is a huge safety factor.
+    crypto.getRandomValues(randArray);
+
+    let retVal = "";
+    let randIndex = 0;
+    while (retVal.length < LENGTH) {
+        let rand = randArray[randIndex] % 64
+        randIndex++;
+
+        if (rand < charset.length) { 
+            retVal += charset.charAt(rand);
+            if (retVal.length % 5 == 4 && retVal.length != LENGTH) {
+                retVal += "-";
+            }
+        }
+    }
+
+    return retVal;
 }
