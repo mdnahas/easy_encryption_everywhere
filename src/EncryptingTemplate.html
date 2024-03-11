@@ -4,18 +4,26 @@
         <meta charset="UTF-8">
         <title>Easy Encryption Everywhere</title>
         <script>
+            const base64selfDecryptingLibSource = "<!--DECRYPT_LIB_BASE64-->"
+            const base64selfDecryptingTemplate = "<!--DECRYPT_TEMPLATE_BASE64-->"
 
-            // Generated code is inserted here!
+            //<!--ENCRYPTION_LIB-->
 
-            // This function is disabled when code is inserted.
-            function generateEncryptedHmtlFile(fileContent, password) {
+            /* Test code  (uncomment to test) 
+            function generateEncryptedHmtlFile(fileContent, 
+                                               password, 
+                                               filename, 
+                                               base64selfDecryptingLibSource, 
+                                               base64selfDecryptingTemplate) {
                 alert("You are executing test code.  Your file is NOT encrypted.")
 
                 console.log("File content as Uint8Array:", fileContent);
                 console.log("Password:", password);
+                console.log("Filename:", filename);
 
                 return fileContent
             }
+            */
 
             async function handleButton(event) {
                 event.preventDefault();
@@ -38,8 +46,8 @@
                     const outputUint8Array = await generateEncryptedHmtlFile(inputUint8Array, 
                                                                              passwordInput.value,
                                                                              file.name,
-                                                                             selfDecryptingLibSource,
-                                                                             selfDecryptingTemplate);
+                                                                             base64selfDecryptingLibSource,
+                                                                             base64selfDecryptingTemplate);
 
                     if (outputUint8Array) {
                         let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});

@@ -36,6 +36,7 @@
 import { readFile, writeFile } from 'fs/promises';
 import { generateEncryptedHmtlFile } from './EncryptingLib.js';
 import { bufferToUint8Array } from './SelfDecryptingLib.js';
+import { stringToBase64 } from './CreateEncryptingLib.js';
 
 
 async function main(filename: string, password : string) {
@@ -53,16 +54,18 @@ async function main(filename: string, password : string) {
 
     const selfDecryptingLibSourceBuffer = await readFile('SelfDecryptingLib.js');
     let selfDecryptingLibSource = selfDecryptingLibSourceBuffer.toString();
+    const base64selfDecryptingLibSource = stringToBase64(selfDecryptingLibSource);
 
     // Create the output file
     const selfDecryptingTemplateBuffer = await readFile('SelfDecryptingTemplate.html');
     const selfDecryptingTemplate = selfDecryptingTemplateBuffer.toString()
-
+    const base64selfDecryptingTemplate = stringToBase64(selfDecryptingTemplate);
+    
     let htmlFile = await generateEncryptedHmtlFile(fileUint8Array, 
                                                    password, 
                                                    filenameWithoutDir, 
-                                                   selfDecryptingLibSource, 
-                                                   selfDecryptingTemplate);
+                                                   base64selfDecryptingLibSource, 
+                                                   base64selfDecryptingTemplate);
     // Write the output file
     const outputFilename = filename + '.ENCRYPTED.html';
     await writeFile(outputFilename, htmlFile);
@@ -72,7 +75,7 @@ async function main(filename: string, password : string) {
 
 // Rest of the functions used in main()...
 if (process.argv.length != 4) {
-    console.log("Usage: node CreateSelfExtractingFile.js <filename> <password>");
+    console.log("Usage: node CreateSelfDecryptingHTMLFile.js <filename> <password>");
     process.exit(1);
 }
 else {

@@ -42,19 +42,33 @@ export async function encryptBuffer(crypto, subtle, fileUint8Array : Uint8Array,
 }
 
 
+export function base64ToString(s : string) : string {
+    if (typeof Buffer !== 'undefined') {
+        // Node.js environment for testing.
+        return Buffer.from(s, 'base64').toString('utf-8');
+    } else {
+        // Browser environment
+        return atob(s);
+    }
+}  
+
+
 export async function generateEncryptedHmtlFile(fileUint8Array : Uint8Array, 
                                          password : string,
                                          filenameWithoutDir : string,
-                                         selfDecryptingLibSource : string,
-                                         selfDecryptingTemplate: string
+                                         base64selfDecryptingLibSource : string,
+                                         base64selfDecryptingTemplate: string
                                          ) : Promise<string> {
 
     let [ base64EncodedSalt, base64EncodedIv, base64EncodedEncryptedFile ] = await encryptBuffer(crypto, crypto.subtle, fileUint8Array, password);
 
+
     // Remove export declations from decryption library
+    let selfDecryptingLibSource = base64ToString(base64selfDecryptingLibSource);
     selfDecryptingLibSource = selfDecryptingLibSource.replace(/export /g, '');
 
     // Write library and encrypted file into the template
+    let selfDecryptingTemplate = base64ToString(base64selfDecryptingTemplate);
     const htmlFile = selfDecryptingTemplate
         .replace(/<!--FILENAME-->/g, filenameWithoutDir)
         .replace(/<!--ENCRYPTED_FILE-->/g, base64EncodedEncryptedFile)
