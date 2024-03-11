@@ -21,7 +21,7 @@ async function main() {
     let encryptingTemplate = encryptingTemplateBuffer.toString();
 
     // Remove export declations from encryption library
-    encryptingLibSource = encryptingLibSource.replace(/export /g, '');
+    encryptingLibSource = encryptingLibSource.replace(/export function/g, 'function');
 
     // Write library and encrypted file into the template
     const htmlFile = encryptingTemplate
@@ -37,8 +37,8 @@ async function main() {
 }
 
 // Rest of the functions used in main()...
-if (process.argv.length != 4) {
-    console.log("Usage: node CreateSelfDecryptingHTMLFile.js");
+if (process.argv.length != 2) {
+    console.log("Usage: node CreateEncryptingHTMLFile.js");
     process.exit(1);
 }
 else {

@@ -26,48 +26,53 @@
             */
 
             async function handleButton(event) {
-                event.preventDefault();
+                try {
+                    event.preventDefault();
 
-                const fileInput = document.getElementById('fileInput');
-                const passwordInput = document.getElementById('passwordInput');
+                    const fileInput = document.getElementById('fileInput');
+                    const passwordInput = document.getElementById('passwordInput');
 
-                if (!passwordInput.value) {
-                    // TODO: When left blank, this program should generate a random password.
-                    alert("Please enter a password.");
-                    return;
-                } 
+                    if (!passwordInput.value) {
+                        // TODO: When left blank, this program should generate a random password.
+                        alert("Please enter a password.");
+                        return;
+                    } 
 
-                if (fileInput.files.length === 1) {
-                    const file = fileInput.files[0];
-                    
-                    const buffer = await file.arrayBuffer()
-                    const inputUint8Array = new Uint8Array(buffer)
+                    if (fileInput.files.length === 1) {
+                        const file = fileInput.files[0];
+                        
+                        const buffer = await file.arrayBuffer()
+                        const inputUint8Array = new Uint8Array(buffer)
 
-                    const outputUint8Array = await generateEncryptedHmtlFile(inputUint8Array, 
-                                                                             passwordInput.value,
-                                                                             file.name,
-                                                                             base64selfDecryptingLibSource,
-                                                                             base64selfDecryptingTemplate);
+                        const outputUint8Array = await generateEncryptedHmtlFile(inputUint8Array, 
+                                                                                passwordInput.value,
+                                                                                file.name,
+                                                                                base64selfDecryptingLibSource,
+                                                                                base64selfDecryptingTemplate);
 
-                    if (outputUint8Array) {
-                        let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});
-                        let url = URL.createObjectURL(blob);
+                        if (outputUint8Array) {
+                            let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});
+                            let url = URL.createObjectURL(blob);
 
-                        let link = document.createElement("a");
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", file.name + ".ENCRYPTED.html");
-                        link.style.visibility = "hidden";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                            let link = document.createElement("a");
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", file.name + ".ENCRYPTED.html");
+                            link.style.visibility = "hidden";
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        } else {
+                            alert("Encryption failed.  No file was created.");
+                        }
+
+                    } else if (fileInput.files.length > 1) {
+                        alert("This program can only encrypt one file at a time.");
                     } else {
-                        alert("Encryption failed.  No file was created.");
+                        alert("Please select a file.");
                     }
-
-                } else if (fileInput.files.length > 1) {
-                    alert("This program can only encrypt one file at a time.");
-                } else {
-                    alert("Please select a file.");
+                } catch (error) {
+                    alert("An error occurred.  Check console log for details.");
+                    console.error(error);
                 }
             }
         </script>
