@@ -52,7 +52,7 @@ export async function decryptString(crypto, subtle, password: string, base64Enco
         {
             name: 'PBKDF2',
             salt: salt.buffer,
-            iterations: 100000,
+            iterations: 600000,
             hash: 'SHA-256'
         },
         key,

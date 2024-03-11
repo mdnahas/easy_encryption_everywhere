@@ -14,7 +14,7 @@ export async function encryptBuffer(crypto, subtle, fileUint8Array : Uint8Array,
         {
             name: 'PBKDF2',
             salt: salt,
-            iterations: 100000,
+            iterations: 600000,
             hash: 'SHA-256'
         },
         key,
