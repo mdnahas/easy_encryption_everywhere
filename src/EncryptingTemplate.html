@@ -51,7 +51,7 @@
                                                                                 base64selfDecryptingTemplate);
 
                         if (outputUint8Array) {
-                            let blob = new Blob([outputUint8Array], {type: "text/csv;charset=utf-8"});
+                            let blob = new Blob([outputUint8Array]);
                             let url = URL.createObjectURL(blob);
 
                             let link = document.createElement("a");
