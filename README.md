@@ -53,3 +53,14 @@ The only other code is the test code.  The ".spec.ts" extension indicates test c
 
 * [src/EncryptDecryptLib.spec.ts](https://github.com/mdnahas/easy_encryption_everywhere/blob/master/src/EncryptDecryptLib.spec.ts)
 
+## Encryption parameters
+
+I've got a Masters of Computer Science and knew a bunch of the basics of encryption when I started.  But encryption is tricky.  To avoid problems, I used public examples and kept the code as simple as possible.
+
+For encryption, I used AES-GCM with 256-bit keys and a 96-bit initialization vector.  It is well-known and widely used.  And used by the US government to encrypt Top Secret files.
+
+For the password, the only option in Web Cryptography API was PBKDF2.  The example code used SHA-256, so I assumed that was the most widely available algorithm.  I saw recommendations to use SHA-512 over SHA-256, but, as far as I could tell, those recommendations were for directly using the algorithm for hashing and not as part of PBKDF2.  I found that OWASP was still recommending PBKDF2-HMAC-SHA256 in 2023 with 600,000 iterations.  So, I went with that.
+
+The lengths of salt and initialization vectors were based on what I found recommended.
+
+I didn't trust users (including myself!) to generate their own passwords.  I added a function to generate 20-character random passwords.  
