@@ -106,9 +106,20 @@
             }
         </script>
     </head>
-    <body>
+    <body style="max-width:18cm; margin: auto;">
 
-        <h1>Encrypt a File with <i>Easy Encryption Everywhere</i></h1>
+        <h1 style="font-family: Arial, sans-serif;">
+            <!-- logo -->    
+            <svg width="1em" viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg">
+                <defs></defs>
+                <ellipse style="stroke: rgb(0, 0, 0);" cx="50" cy="45" rx="45" ry="45"></ellipse>
+                <ellipse style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="50" cy="45" rx="25" ry="25"></ellipse>
+                <rect x="0" y="40" width="100" height="85" style="stroke: rgb(0, 0, 0);"></rect>
+                <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 40px; white-space: pre;" x="10" y="95">EEE</text>
+            </svg>
+            Easy Encryption Everywhere</h1>
+
+        <p><i>Create a password-protected file.  It's easy!</i></p>
 
         <form action="" onsubmit="handleButton(event)">
             <label for="fileInput">File:</label>
@@ -123,23 +134,24 @@
 
         <br />
         <br />
-        <br />        
+        <br />      
         <hr />
 
         <h2>What is <i>Easy Encryption Everywhere</i>?</h2>
 
-        <p>Easy Encryption Everywhere lets you encrypt a file with serious encryption
-            and be pretty sure that the receiver can decrypt it.</p> 
+        <p>Easy Encryption Everywhere creates password-protected files 
+            using high-level encryption
+            and almost every receiver can decrypt them.</p> 
         
         <p><b>Easy:</b> You choose a file and enter a password. 
             Then, Easy Encryption Everywhere encrypts the file inside your own webbrowser.  
-            The encrypted data is saved in an HTML file. 
+            The password-protected data is saved inside an HTML file. 
             The recipient opens that HTML file in their webbrowser and types in the password.
             Easy Encryption Everywhere decrypts the file inside their webbrowser 
-            and they get the original decrypted file.</p>   
+            and they get the file.</p>   
 
-        <p><b>Encryption:</b> Easy Encryption Everywhere uses AES algorithm with 256-bit keys, 
-            which was approved in 2022 by the US government for Top Secret information.  
+        <p><b>Encryption:</b> Easy Encryption Everywhere uses the AES algorithm with 256-bit keys, 
+            which was <a href="https://en.wikipedia.org/wiki/Commercial_National_Security_Algorithm_Suite">approved in 2022 by the US government for Top Secret documents</a>.  
         </p>
             
         <p><b>Everywhere:</b> As long as the recipient has a major webbrowser from 2015 or later, 
@@ -147,32 +159,38 @@
 
         <h2>Who do I thank for this?</h2>
 
-        <p>My friend has a company 
-            <b><a href="https://www.unifiedeventsolutions.com/">Unified Event Solutions</a></b>
-           and needed to send credit card data to a client.  
+        <p>
+            <b><a href="https://www.unifiedeventsolutions.com/">Unified Event Solutions</a></b>.
+            My friend owns the company and they needed to send credit card data to a client.  
            My friend didn't know what encryption software was on the client's computer 
            and wasn't sure if the client could install software.
            My friend sponsored the initial version of Easy Encryption Everywhere.</p>
 
-        <p>My friend's company organizes large conferences. 
+        <p>Unified Event Solutions organizes large conferences. 
             If you have a multi-hotel conference and need services like 
-            site selection, hotel contract negotiation, or transportation please 
-            <a href="https://www.unifiedeventsolutions.com/contact.html">contact my friend</a>.</p>
+            site selection, hotel contract negotiation, and/or transportation, please 
+            reward my friend's decision to open-source this software and
+            <a href="https://www.unifiedeventsolutions.com/contact.html">contact Unified Event Solutions</a>.</p>
 
         <h2>How do I trust you?</h2>
 
         <p>I'm a good guy and been developing open-source for decades, 
             but trust over the internet is <i>hard</i>.</p>  
-        
+
+        <p>To start, the authentic copy of Easy Encryption Everywhere 
+            is at <a href="https://michaeldnahas.com/EasyEncryptionEverywhere.html">https://michaeldnahas.com/EasyEncryptionEverywhere.html</a>.
+            Beware someone pointing you to a different site or sending you a saved HTML file.
+        </p>
+
         <p>If you're paranoid and know JavaScript, you can load this webpage, 
             disconnect your computer from the internet, encrypt your data, 
-            and look at the HTML file it generates.  The JavaScript program
-            inside the HTML is pretty simple to understand.</p>
+            and look at the generated HTML file.  The JavaScript program
+            inside the HTML is simple to understand.</p>
 
-        <p>The original code is open-sourced and 
-            <a href="https://github.com/mdnahas/easy_encryption_everywhere">available on Github</a>.  
-            You can look at the code and see that it doesn't send your data anywhere.  
-            Or, if you don't trust my website, compile the TypeScript for yourself.
+        <p> 
+            <a href="https://github.com/mdnahas/easy_encryption_everywhere">All code is open-sourced and available on Github</a>.  
+            You can look at the code and see that it doesn't send/save your data anywhere.  
+            Or, if you don't trust my website, you're welcome to compile the TypeScript for yourself.
         </p>
 
         <h2>What tech does this use?</h2>
@@ -181,8 +199,25 @@
             which is available in major webbrowsers since 2015.  
             For generating an encryption key, 
             it uses PBKDF2-HMAC-SHA256 with a 128-bit salt and 600,000 iterations.
-            For encryption, it uses AES-GCM with a 256-bit key and 96-bit initialization vector.
+            For encryption, it uses AES-GCM with a 256-bit key and a 96-bit initialization vector.
             The salt, initialization vector, and passwords are generated using crypto.getRandomValues().  
         </p>
+
+        <p>If you're a geek, check out the code.  
+            It has a program that produces a program that produces a program!</p>
+
+        <h2>What legal mumbo-jumbo do you have to say?</h2>
+
+        <p>Easy Encryption Everywhere comes with no warrantee.  
+            (That said, I trust it enough to have my friend's company use it.) 
+            Easy Encryption Everywhere is my trademark.  
+            If you modify the code, you cannot call it "Easy Encryption Everywhere."
+            (But you can send me a pull request on Github to have your changed integrated into Easy Encryption Everywhere.)
+            It is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons BY 4.0 license</a>.
+            Copyright 2024 Michael D. Nahas.
+        </p>
+
+        <br/>
+        <a href="#">Back to top of page.</a>
     </body>
 </html>

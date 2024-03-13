@@ -49,26 +49,35 @@
                         alert("Incorrect password");
                     }
                 } catch (error) {
-                    alert("An error occurred.  Check console log for details.");
+                    alert("An error occurred.  Check the console log for details.");
                     console.error(error);
                 }
             }
 
         </script>
     </head>
-    <body>
-        <h1>Password-protected copy of <!--FILENAME--></h1>
+    <body style="max-width:18cm; margin: auto;">
+        <h1 style="font-family: Arial, sans-serif;">
+            <!-- logo -->    
+            <svg width="1em" viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg">
+                <defs></defs>
+                <ellipse style="stroke: rgb(0, 0, 0);" cx="50" cy="45" rx="45" ry="45"></ellipse>
+                <ellipse style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="50" cy="45" rx="25" ry="25"></ellipse>
+                <rect x="0" y="40" width="100" height="85" style="stroke: rgb(0, 0, 0);"></rect>
+                <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 40px; white-space: pre;" x="10" y="95">EEE</text>
+            </svg>
+            Password-protected file: <!--FILENAME--></h1>
         <p>
-            This is a password-protected copy of <!--FILENAME-->.
-            The file is encrypted with AES-256 using the Web Cryptography API.
-            "AES" is the Advanced Encryption Standard approved by 
-            the National Institute of Standards and Technology (NIST). 
-            As far as we know, this is the strongest encryption
-            available on most computers.  
+            This is a password-protected file created with 
+            <a href="https://michaeldnahas.com/EasyEncryptionEverywhere.html">Easy Encryption Everywhere</a>.
+            It uses AES-256 encryption, which was 
+            <a href="https://en.wikipedia.org/wiki/Commercial_National_Security_Algorithm_Suite">approved by the 
+            US government for Top Secret documents</a>. 
         </p>
         <br />
+        
         <p>
-            Please enter the password to extract the file.
+            Please enter the password to extract "<!--FILENAME-->".
             <form action="" id="passwordForm" onsubmit="handleButton(event)">
                 <label for="password">Password:</label>
                 <input type="text" id="password" />
